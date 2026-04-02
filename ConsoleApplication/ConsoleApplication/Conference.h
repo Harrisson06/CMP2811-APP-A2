@@ -8,5 +8,6 @@ private:
 public:
     Conference(string id, string title, string acronym);
     string getAcronym() {return _acronym; }
+    void setAcronym(string a) { _acronym = a; }
     string asString() override;
 };
