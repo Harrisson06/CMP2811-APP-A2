@@ -1,0 +1,66 @@
+#####
+#RESOURCE LIST
+#Book: Author Surname, Author First name: title: year
+#Journal: Volume number: issue numbers
+#Conference: Conference title followed by conference acronyms
+#####
+Fox, Charles
+Computer Architecture
+2023
+Easttom, Chuck
+Computer Security Fundamentals
+2023
+Rogers, Yvonne
+Interaction Design: beyond human-computer interaction
+2023
+Lu, Cheng
+Socially Responsible AI: Theories and Practices
+2023
+Manovich, Lev
+Cultural Analytics
+2020
+Stallings, William
+Operating Systems: internals and design principles
+2018
+Gregoire, Marc
+Professional C++
+2023
+Pfleeger, Charles
+Security in Computing
+2024
+Driscoll, Kevin
+The modem world: a prehistory of social media
+2022
+Skiena, Steven
+The algorithm design manual
+2021
+#####
+ACM Transactions on Algorithms
+1:1 2 3 4
+2:1 2 3 4
+ACM Transactions on Graphics
+1:1 2 3 4
+2:1 2 3 4
+#####
+ACM Conference on Computer-Human Interaction
+CHI2025
+CHI2024
+CHI2023
+CHI2022
+ACM The Web Conference
+WWW2025
+WWW2024
+WWW2023
+WWW2022
+IEEE/CVF Conference on Computer Vision and Pattern Recognition
+CVPR2025
+CVPR2024
+CVPR2023
+CVPR2022
+IEEE Conference on Games
+COG2025
+ACPI European Conference on Games Based Learning
+ECGBL2025
+ICGA Computers and Games
+CG2026
+
