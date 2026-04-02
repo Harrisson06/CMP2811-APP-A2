@@ -21,7 +21,7 @@ ResourceList::ResourceList(string filename) {
         }
         if (line[0] == '#' || line.empty()) continue;
 
-        if (section == 1) {
+        if (section == 2) {
             // Books: Author | Title | Year 
             string author = line;
             string title, year;
@@ -31,7 +31,7 @@ ResourceList::ResourceList(string filename) {
             string id = "B00" + to_string(bookCount);
             _r_list.push_back(new Book(id, title, author));
         }
-        else if (section == 2) {
+        else if (section == 3) {
             //Conference: title | Volume: issue
             string title = line;
             string issues;
@@ -40,7 +40,7 @@ ResourceList::ResourceList(string filename) {
             string id ="J00" + to_string(journalCount);
             _r_list.push_back(new Journal(id, title));
         }
-        else if (section ==3) {
+        else if (section == 4) {
             // conference: title | acronyms
             string title = line;
             string acronym;
