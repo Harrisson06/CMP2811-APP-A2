@@ -14,7 +14,7 @@ int main() {
     ResourceList resourceList("A2resourceList.txt");
     UserList userList("A2userlist.txt");
 
-    cout << "### wWelcome to UniLib: The University Library Management System ###" << endl;
+    cout << "<|| Welcome to UniLib: The University Library Management System ||>" << endl;
     cout << "Borrow [userID] [resourceID]" << endl;
     cout << "Return [userID] [resourceID]" << endl;
     cout << "list : All resources available for endling" << endl;

@@ -31,7 +31,7 @@ ResourceList::ResourceList(string filename) {
             string id = "B00" + to_string(bookCount);
             _r_list.push_back(new Book(id, title, author));
         }
-        else if (section == 3) {
+        else if (section == 2) {
             //Conference: title | Volume: issue
             string title = line;
             string issues;
