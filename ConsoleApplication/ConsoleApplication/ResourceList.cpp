@@ -71,6 +71,8 @@ ResourceList::ResourceList(string filename) {
 
 void ResourceList::printResourceList() {
     for (auto r : _r_list) {
-        cout << r->asString() << endl;
+        if (!r->getIsBorrowed()) {
+			cout << r->asString() << endl;
+        }
     }
 }

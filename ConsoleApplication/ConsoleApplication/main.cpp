@@ -94,6 +94,10 @@ int main() {
                 cout << "Resource not found" << endl;
             }
 
+			else if (user->getBorrowlimit() == 0) {
+				cout << "User " << userID << " is not allowed to borrow resource" << endl;
+			}
+
             else if (!resource->getCanLend() || resource->getIsBorrowed()) {
                 cout << "Resource " << resourceID << " is currently unable to be borrowed" << endl;
             }
