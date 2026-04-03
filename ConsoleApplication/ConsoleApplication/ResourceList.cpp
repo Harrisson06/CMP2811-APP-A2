@@ -54,17 +54,14 @@ ResourceList::ResourceList(string filename) {
                 confCount++;
                 string id = "C00" + to_string(confCount);
                 _r_list.push_back(new Conference(id, title, ""));
+
             } else {
-                if (_r_list.empty()) {
-                    Conference* last = dynamic_cast<Conference*>(_r_list.back());
-                    cout << "trying to set acro: " << line << endl;
-                    if (last != nullptr && last->getAcronym() == "") {
-                        cout << "Cast success" << endl;
-                        last->setAcronym(line);
-                    }
-                    else {
-                        cout << "Cast fail" << endl;
-                    }
+                // No spaces == acronym | find last conference and update
+				if (!_r_list.empty()) {
+					Conference* c = dynamic_cast<Conference*>(_r_list.back());
+					if (c != nullptr && c->getAcronym() == "") {
+						c->setAcronym(line);
+					}
                 }
             }
         }

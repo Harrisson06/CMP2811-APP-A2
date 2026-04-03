@@ -11,6 +11,7 @@ protected:
 
 public:
     Resource(string id, string title, bool canlend);
+	virtual ~Resource() {}
     virtual string asString() = 0;
 
     // Getters
