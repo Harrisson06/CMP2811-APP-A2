@@ -5,6 +5,7 @@
 #include "ResourceList.h"
 #include "UserList.h"
 #include "Loan.h"
+#include "Person.h"
 #include <algorithm>
 
 using namespace std;
@@ -47,6 +48,12 @@ int main() {
             if (type == 1) {
                 cout << "Resources currently loaned out:" << endl;
                 for (auto loan : loans) {
+                    cout << loan->getResource()->asString() << endl;
+                }
+            }
+            else if (type == 2) {
+                cout << "Users who have borrowed resources:" << endl;
+                for (auto loan : loans) {
                     cout << loan->getPerson()->asString() << endl;
                 }
             }
@@ -74,6 +81,10 @@ int main() {
                     break;
                 }
             }
+            int userLoanCount = 0;
+            for (auto& loan : loans) {
+                if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
+            }
 
             if (user == nullptr) {
                 cout << "User not found" << endl;
@@ -86,10 +97,11 @@ int main() {
             else if (!resource->getCanLend() || resource->getIsBorrowed()) {
                 cout << "Resource " << resourceID << " is currently unable to be borrowed" << endl;
             }
-
-            else if (loans.size() >= user->getBorrowlimit()) {
-                cout << "User " << userID << " has reached their borrow limit" << endl;
+        
+            else if (userLoanCount >= user->getBorrowlimit()) {
+                cout << "User " << userID << " has reached their borrowing limit" << endl;
             }
+
 
             else {
                 resource->setIsBorrowed(true);
