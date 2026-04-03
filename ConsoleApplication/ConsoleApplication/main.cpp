@@ -1,12 +1,14 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+
 #include "ResourceList.h"
 #include "UserList.h"
 #include "Loan.h"
 #include "Person.h"
-#include <algorithm>
 
 using namespace std;
 
@@ -55,6 +57,20 @@ int main() {
                 cout << "Users who have borrowed resources:" << endl;
                 for (auto loan : loans) {
                     cout << loan->getPerson()->asString() << endl;
+                }
+
+                // Save file?
+				cout << "Do you want to save this report to a file? (y/n) ";
+                string save;
+                getline(cin, save);
+                if (save == "y" || save == "Y") {
+                    ofstream report("Report.txt");
+					report << "Users who have borrowed resources:" << endl;
+                    for (auto loan : loans) {
+						report << loan->getPerson()->asString() << endl;
+                    }
+                    report.close();
+					cout << "Report saved to Report.txt" << endl;
                 }
             }
         }
@@ -111,6 +127,10 @@ int main() {
                 resource->setIsBorrowed(true);
                 loans.push_back(new Loan(user, resource));
                 cout << "Resource has been borrowed" << endl;
+                // Saving borrow history
+				ofstream history("History.txt", ios::app);
+				history << "Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
+                history.close();
             }
         }
 
@@ -125,8 +145,48 @@ int main() {
                     loan->getResource()->setIsBorrowed(false);
                     loans.erase(remove(loans.begin(), loans.end(), loan), loans.end());
                     cout << "Resource has been returned" << endl;
+                    // Saving return history
+					ofstream history("history.txt", ios::app);
+					history << "Returned: User " << userID << " returned Resource " << resourceID << endl;
+					history.close();
                     break;
                 }
+            }
+        }
+        else if (command == "history") {
+			ifstream history("history.txt");
+			if (history.is_open()) {
+				string line;
+                cout << "Borrowing and Return history: " << endl;
+				while (getline(history, line)) {
+					cout << line << endl;
+				}
+				history.close();
+			}
+			else {
+				cout << "No history available." << endl;
+			}
+        }
+        else if (command == "search") {
+            string keyword;
+            iss >> keyword;
+
+            transform(keyword.begin(), keyword.end(), keyword.begin(), ::tolower);
+
+            cout << "Search results for \"" << keyword << "\":" << endl;
+            bool found = false;
+
+            for (auto r : resourceList.getList()) {
+                string str = r->asString();
+                // Converts to lowercase for comparison
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
+                if (str.find(keyword) != string::npos) {
+                    cout << r->asString() << endl;
+                    found = true;
+                }
+            }
+            if (!found) {
+                cout << "No resources found matching the keyword." << endl;
             }
         }
 

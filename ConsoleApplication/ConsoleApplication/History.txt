@@ -1,0 +1,2 @@
+Borrowed: User 1 borrowed Resource B001
+Borrowed: User 2 borrowed Resource B002
