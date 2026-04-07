@@ -20,7 +20,7 @@ ResourceList::ResourceList(string filename) {
 
     // Read file line by line
     while (getline(file, line)) {
-        //IF: Line is a section seperator (#####), increment section counter and continue to next line
+        //IF: Line is a section separator (#####), increment section counter and continue to next line
         if (line.substr(0, 5) == "#####") {
             section++;
             continue;
@@ -86,7 +86,7 @@ ResourceList::ResourceList(string filename) {
                     // Get last added resource and cast it to conference type
 					Conference* c = dynamic_cast<Conference*>(_r_list.back());
 
-					// IF: Successully cast to conference && Acronym is empty
+					// IF: Successfully cast to conference && Acronym is empty
 					if (c != nullptr && c->getAcronym() == "") {
                         // Set acronym to this conference
 						c->setAcronym(line);

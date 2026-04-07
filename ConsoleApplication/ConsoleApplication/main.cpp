@@ -79,7 +79,7 @@ int main() {
             }
         }
 
-		// ELSE IF: USer wants a report of resources currently loaned out, or users who have borrowed resources
+		// ELSE IF: Uer wants a report of resources currently loaned out, or users who have borrowed resources
         else if (command == "report") {
             int type;
             iss >> type;
@@ -243,7 +243,7 @@ int main() {
 			// Opens history.txt
 			ifstream history("history.txt");
 
-            // IF: history,txt opened successfully
+            // IF: history.txt opened successfully
 			if (history.is_open()) {
 				string line;
                 cout << "Borrowing and Return history: " << endl;
