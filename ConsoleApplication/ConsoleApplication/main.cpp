@@ -36,21 +36,65 @@ int main() {
         string command;
         iss >> command;
 
+		// Exit the program
         if (command == "exit") {
             break;
         }
 
+		// Lets user list all available resources;
+        // Ascending | Descending
         else if (command == "list") {
-            resourceList.printResourceList();
+            string sortOption;
+            iss >> sortOption;
+
+            vector<Resource*> available;
+            for (auto r : resourceList.getList()) {
+                if (!r->getIsBorrowed()) available.push_back(r);
+            }
+
+            if (sortOption == "ascending") {
+                sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
+                    return a->getTitle() < b->getTitle();
+                });
+            }
+            else if (sortOption == "descending") {
+				sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
+					return a->getTitle() > b->getTitle();
+					});
+            }
+
+            for (auto r : available) {
+				cout << r->asString() << endl;
+            }
         }
 
+		// Prints a list of resources;
+		// Currently loaned out | Users who have borrowed resources
         else if (command == "report") {
             int type;
             iss >> type;
             if (type == 1) {
-                cout << "Resources currently loaned out:" << endl;
+                string sortOption;
+                iss >> sortOption;
+
+				vector<Resource*> loaned;
                 for (auto loan : loans) {
-                    cout << loan->getResource()->asString() << endl;
+                    loaned.push_back(loan->getResource());
+                }
+
+                if (sortOption == "ascending") {
+					sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
+						return a->getTitle() < b->getTitle();
+						});
+				}
+				else if (sortOption == "descending") {
+					sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
+						return a->getTitle() > b->getTitle();
+						});
+				}
+                cout << "Resources currently loaned out:" << endl;
+                for (auto r : loaned) {
+                    cout << r->asString() << endl;
                 }
             }
             else if (type == 2) {
@@ -173,23 +217,33 @@ int main() {
 
             transform(keyword.begin(), keyword.end(), keyword.begin(), ::tolower);
 
-            cout << "Search results for \"" << keyword << "\":" << endl;
-            bool found = false;
+            vector<Resource*> results;
 
             for (auto r : resourceList.getList()) {
-                string str = r->asString();
-                // Converts to lowercase for comparison
-                transform(str.begin(), str.end(), str.begin(), ::tolower);
+				string str = r->asString();
+				transform(str.begin(), str.end(), str.begin(), ::tolower);
                 if (str.find(keyword) != string::npos) {
-                    cout << r->asString() << endl;
-                    found = true;
+                    results.push_back(r);
                 }
             }
-            if (!found) {
-                cout << "No resources found matching the keyword." << endl;
+
+			// Sort alphabetically by Title
+            sort(results.begin(), results.end(), [](Resource* a, Resource* b) {
+                return a->getTitle() < b->getTitle();
+                });
+
+            cout << "Search results for \"" << keyword << "\":" << endl;
+            if (results.empty()) {
+                cout << "No results found" << endl;
+            }
+            else {
+				for (auto r : results) {
+					cout << r->asString() << endl;
+				}
             }
         }
 
+		// Error handle for nothing matching the command
         else {
             cout << "unknown command." << endl;
         }

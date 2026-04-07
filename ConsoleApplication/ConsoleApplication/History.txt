@@ -1,2 +1,8 @@
 Borrowed: User 1 borrowed Resource B001
 Borrowed: User 2 borrowed Resource B002
+Borrowed: User 1 borrowed Resource B001
+Borrowed: User 5 borrowed Resource B005
+Borrowed: User 6 borrowed Resource B003
+Borrowed: User 1 borrowed Resource B001
+Borrowed: User 5 borrowed Resource B005
+Borrowed: User 6 borrowed Resource B006
