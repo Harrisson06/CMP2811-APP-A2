@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 
+
 #include "ResourceList.h"
 #include "UserList.h"
 #include "Loan.h"
@@ -14,8 +15,8 @@ using namespace std;
 
 int main() {
     // Loads data from files
-    ResourceList resourceList("A2resourceList.txt");
-    UserList userList("A2userlist.txt");
+    ResourceList resourceList("A2ResourceList.txt");
+    UserList userList("A2UserList.txt");
 
     // Display welcome message and instructions for commands
     cout << "<|| Welcome to UniLib: The University Library Management System ||>" << endl;
@@ -164,49 +165,51 @@ int main() {
                 }
             }
 
-            // Counts how many resources the user currently has borrowed
-            int userLoanCount = 0;
-            for (auto& loan : loans) {
-                if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
-            }
-
             // VALIDATION: Check if user exits in system
             if (user == nullptr) {
                 cout << "User not found" << endl;
             }
 
-			// VALIDATION: Check if resource exists in system
+            // VALIDATION: Check if resource exists in system
             else if (resource == nullptr) {
                 cout << "Resource not found" << endl;
             }
-
-			// VALIDATION: Check if user has borrow persission (borrow limit > 0)
-			else if (user->getBorrowlimit() == 0) {
-				cout << "User " << userID << " is not allowed to borrow resource" << endl;
-			}
-
-            // VALIDATION: Check if resource can be borrowed
-            else if (!resource->getCanLend() || resource->getIsBorrowed()) {
-                cout << "Resource " << resourceID << " is currently unable to be borrowed" << endl;
-            }
-        
-			// VALIDATION: Check if user has reached their borrow limit
-            else if (userLoanCount >= user->getBorrowlimit()) {
-                cout << "User " << userID << " has reached their borrowing limit" << endl;
-            }
-
-			// ALL VALIDATIONS PASSED: Proceed with borrowing the resource
             else {
-                // Marks resource as borrowed
-                resource->setIsBorrowed(true);
-                // Creates new loan record
-                loans.push_back(new Loan(user, resource));
-                cout << "Resource has been borrowed" << endl;
+				// Counts how many resources the user currently has borrowed
+				int userLoanCount = 0;
+				for (auto& loan : loans) {
+					if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
+				}
+            
 
-                // Appends borrow transaction to history.txt
-				ofstream history("History.txt", ios::app);
-				history << "Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
-                history.close();
+			    // VALIDATION: Check if user has borrow persission (borrow limit > 0)
+			    if (user->getBorrowlimit() == 0) {
+				    cout << "User " << userID << " is not allowed to borrow resource" << endl;
+			    }
+
+                // VALIDATION: Check if resource can be borrowed
+                else if (!resource->getCanLend() || resource->getIsBorrowed()) {
+                    cout << "Resource " << resourceID << " is currently unable to be borrowed" << endl;
+                }
+        
+			    // VALIDATION: Check if user has reached their borrow limit
+                else if (userLoanCount >= user->getBorrowlimit()) {
+                    cout << "User " << userID << " has reached their borrowing limit" << endl;
+                }
+
+			    // ALL VALIDATIONS PASSED: Proceed with borrowing the resource
+                else {
+                    // Marks resource as borrowed
+                    resource->setIsBorrowed(true);
+                    // Creates new loan record
+                    loans.push_back(new Loan(user, resource));
+                    cout << "Resource has been borrowed" << endl;
+
+                    // Appends borrow transaction to history.txt
+                    ofstream history("History.txt", ios::app);
+                    history << "Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
+                    history.close();
+                }
             }
         }
 
@@ -230,7 +233,7 @@ int main() {
 
 
                     // Append return transaction to history.txt
-					ofstream history("history.txt", ios::app);
+					ofstream history("History.txt", ios::app);
 					history << "Returned: User " << userID << " returned Resource " << resourceID << endl;
 					history.close();
                     break;
@@ -241,7 +244,7 @@ int main() {
         // ELSE IF: User wants to view transaction history
         else if (command == "history") {
 			// Opens history.txt
-			ifstream history("history.txt");
+			ifstream history("History.txt");
 
             // IF: history.txt opened successfully
 			if (history.is_open()) {
@@ -306,5 +309,10 @@ int main() {
             cout << "unknown command." << endl;
         }
     }
+	// Manual cleanup of memory allocated for loans
+	for (auto loan : loans) {
+		delete loan;
+	}
+    loans.clear();
     return 0;
 }
