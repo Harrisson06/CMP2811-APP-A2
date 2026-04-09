@@ -1,2 +1,4 @@
 Resources currently loaned out:
+ID: B001 | Title: Computer Architecture | Author: Fox, Charles
 ID: B002 | Title: Computer Security Fundamentals | Author: Easttom, Chuck
+ID: B003 | Title: Interaction Design: beyond human-computer interaction | Author: Rogers, Yvonne

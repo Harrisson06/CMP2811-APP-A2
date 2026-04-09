@@ -41,13 +41,13 @@ int main() {
         string command;
         iss >> command;
 
-		// IF: user enters "exit"
+        // IF: user enters "exit"
         if (command == "exit") {
             // Exit program
             break;
         }
 
-		// ELSE IF: Lets user list all available resources;
+        // ELSE IF: Lets user list all available resources;
         // Allows sorting in Ascending and Descending
         else if (command == "list") {
             string sortOption;
@@ -56,7 +56,7 @@ int main() {
             // Create vector of available resources 
             vector<Resource*> available;
             for (auto r : resourceList.getList()) {
-				// IF: Resource is not currently loaned out, add to available list
+                // IF: Resource is not currently loaned out, add to available list
                 if (!r->getIsBorrowed()) available.push_back(r);
             }
 
@@ -76,23 +76,23 @@ int main() {
             else if (sortOption == "ascending") {
                 sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
                     return a->getTitle() < b->getTitle();
-                });
+                    });
             }
 
-			// ELSE IF: User selected descending sort order (Z-A)
+            // ELSE IF: User selected descending sort order (Z-A)
             else if (sortOption == "descending") {
-				sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
-					return a->getTitle() > b->getTitle();
-					});
+                sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
+                    return a->getTitle() > b->getTitle();
+                    });
             }
 
             // Display all available resources
             for (auto r : available) {
-				cout << r->asString() << endl;
+                cout << r->asString() << endl;
             }
         }
 
-		// ELSE IF: Uer wants a report of resources currently loaned out, or users who have borrowed resources
+        // ELSE IF: Uer wants a report of resources currently loaned out, or users who have borrowed resources
         else if (command == "report") {
             int type;
             iss >> type;
@@ -101,16 +101,16 @@ int main() {
                 iss >> sortOption;
 
                 // Collects all resources that are loaned out
-				vector<Resource*> loaned;
+                vector<Resource*> loaned;
                 for (auto& loan : loans) {
                     loaned.push_back(loan->getResource());
                 }
 
-				// IF: User selected sort by author
+                // IF: User selected sort by author
                 if (sortOption == "author") {
-					cout << "ascending or descending?" << endl;
-					string order;
-					getline(cin, order);
+                    cout << "ascending or descending?" << endl;
+                    string order;
+                    getline(cin, order);
                     sort(loaned.begin(), loaned.end(), [&](Resource* a, Resource* b) {
                         Book* ba = dynamic_cast<Book*>(a);
                         Book* bb = dynamic_cast<Book*>(b);
@@ -119,19 +119,19 @@ int main() {
                         });
                 }
 
-				// ELSE IF: User selected ascending sort order (A-Z)
+                // ELSE IF: User selected ascending sort order (A-Z)
                 else if (sortOption == "ascending") {
-					sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
-						return a->getTitle() < b->getTitle();
-						});
-				}
-                
-				// ELSE IF: User selected descending sort order (Z-A)
-				else if (sortOption == "descending") {
-					sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
-						return a->getTitle() > b->getTitle();
-						});
-				}
+                    sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
+                        return a->getTitle() < b->getTitle();
+                        });
+                }
+
+                // ELSE IF: User selected descending sort order (Z-A)
+                else if (sortOption == "descending") {
+                    sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
+                        return a->getTitle() > b->getTitle();
+                        });
+                }
 
                 // Display: Resource loaned out
                 cout << "Resources currently loaned out:" << endl;
@@ -139,13 +139,13 @@ int main() {
                     cout << r->asString() << endl;
                 }
 
-				// Prompt user to save the report to a .txt file
-				cout << "Do you want to save this report to a file? (y/n) ";
-				string save;    
-				getline(cin, save);
+                // Prompt user to save the report to a .txt file
+                cout << "Do you want to save this report to a file? (y/n) ";
+                string save;
+                getline(cin, save);
 
                 if (save == "y" || save == "Y") {
-                    // Create/overwrite LoaneReport.txt file and write loaned resources list
+                    // Create/overwrite Report.txt file and write loaned resources list
                     ofstream report("Report.txt");
                     report << "Resources currently loaned out:" << endl;
 
@@ -165,26 +165,26 @@ int main() {
                 }
 
                 // Prompt user to save the report to a .txt file
-				cout << "Do you want to save this report to a file? (y/n) ";
+                cout << "Do you want to save this report to a file? (y/n) ";
                 string save;
                 getline(cin, save);
 
-				// IF: User enteres "y" or "Y", save the report to "Report.txt"
+                // IF: User enteres "y" or "Y", save the report to "Report.txt"
                 if (save == "y" || save == "Y") {
-					// Create/overwrite Report.txt file and writes user list
+                    // Create/overwrite Report.txt file and writes user list
                     ofstream report("Report.txt");
-					report << "Users who have borrowed resources:" << endl;
+                    report << "Users who have borrowed resources:" << endl;
 
                     for (auto& loan : loans) {
-						report << loan->getPerson()->asString() << endl;
+                        report << loan->getPerson()->asString() << endl;
                     }
                     report.close();
-					cout << "Report saved to Report.txt" << endl;
+                    cout << "Report saved to Report.txt" << endl;
                 }
             }
         }
 
-		// ELSE IF: User wants to borrow a resource
+        // ELSE IF: User wants to borrow a resource
         else if (command == "borrow") {
             int userID;
             string resourceID;
@@ -192,20 +192,22 @@ int main() {
 
             // Finding user by ID
             Person* user = nullptr;
-			auto userIt = find_if(userList.getList().begin(), userList.getList().end(), [&](Person* p) {
-				return p->getID() == userID;
-				});
-			if (userIt != userList.getList().end()) {
-				user = *userIt;
+            auto uList = userList.getList();
+            auto userIt = find_if(uList.begin(), uList.end(), [&](Person* p) {
+                return p->getID() == userID;
+                });
+            if (userIt != uList.end()) {
+                user = *userIt;
             }
 
             // Finding resource by ID
             Resource* resource = nullptr;
-			auto resourceIt = find_if(resourceList.getList().begin(), resourceList.getList().end(), [&](Resource* r) {
-				return r->getID() == resourceID;
-				});
-			if (resourceIt != resourceList.getList().end()) {
-				resource = *resourceIt;
+            auto rList = resourceList.getList();
+            auto resourceIt = find_if(rList.begin(), rList.end(), [&](Resource* r) {
+                return r->getID() == resourceID;
+                });
+            if (resourceIt != rList.end()) {
+                resource = *resourceIt;
             }
 
             // VALIDATION: Check if user exits in system
@@ -218,29 +220,29 @@ int main() {
                 cout << "Resource not found" << endl;
             }
             else {
-				// Counts how many resources the user currently has borrowed
-				int userLoanCount = 0;
-				for (auto& loan : loans) {
-					if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
-				}
-            
+                // Counts how many resources the user currently has borrowed
+                int userLoanCount = 0;
+                for (auto& loan : loans) {
+                    if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
+                }
 
-			    // VALIDATION: Check if user has borrow persission (borrow limit > 0)
-			    if (user->getBorrowlimit() == 0) {
-				    cout << "User " << userID << " is not allowed to borrow resource" << endl;
-			    }
+
+                // VALIDATION: Check if user has borrow persission (borrow limit > 0)
+                if (user->getBorrowlimit() == 0) {
+                    cout << "User " << userID << " is not allowed to borrow resource" << endl;
+                }
 
                 // VALIDATION: Check if resource can be borrowed
                 else if (!resource->getCanLend() || resource->getIsBorrowed()) {
                     cout << "Resource " << resourceID << " is currently unable to be borrowed" << endl;
                 }
-        
-			    // VALIDATION: Check if user has reached their borrow limit
+
+                // VALIDATION: Check if user has reached their borrow limit
                 else if (userLoanCount >= user->getBorrowlimit()) {
                     cout << "User " << userID << " has reached their borrowing limit" << endl;
                 }
 
-			    // ALL VALIDATIONS PASSED: Proceed with borrowing the resource
+                // ALL VALIDATIONS PASSED: Proceed with borrowing the resource
                 else {
                     // Marks resource as borrowed
                     resource->setIsBorrowed(true);
@@ -262,12 +264,15 @@ int main() {
             string resourceID;
             iss >> userID >> resourceID;
 
-			auto it = remove_if(loans.begin(), loans.end(), [&](const unique_ptr<Loan>& l) {
-				return l->getPerson()->getID() == userID && l->getResource()->getID() == resourceID;
-				});
+            auto it = remove_if(loans.begin(), loans.end(), [&](const unique_ptr<Loan>& l) {
+                return l->getPerson()->getID() == userID && l->getResource()->getID() == resourceID;
+                });
 
             if (it != loans.end()) {
-                (*it)->getResource()->setIsBorrowed(false);
+                // Sets resource as available before erasing
+                for (auto i = it; i != loans.end(); ++i) {
+                    (*i)->getResource()->setIsBorrowed(false);
+                }
                 loans.erase(it, loans.end());
                 cout << "Resource Has been returned" << endl;
                 ofstream history("History.txt", ios::app);
@@ -285,7 +290,7 @@ int main() {
             string keyword;
             iss >> keyword;
 
-			// Convert search keyword to lowercase for case-insensitive search
+            // Convert search keyword to lowercase for case-insensitive search
             transform(keyword.begin(), keyword.end(), keyword.begin(), ::tolower);
 
             // Vector stores search results
@@ -293,17 +298,17 @@ int main() {
 
             // Search through all resources fro keyword match
             for (auto r : resourceList.getList()) {
-				// Convers resource string representation to lowercase
-				string str = r->asString();
-				transform(str.begin(), str.end(), str.begin(), ::tolower);
+                // Convers resource string representation to lowercase
+                string str = r->asString();
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
 
-				// IF: Keyword found in resource string, add to search results
+                // IF: Keyword found in resource string, add to search results
                 if (str.find(keyword) != string::npos) {
                     results.push_back(r);
                 }
             }
 
-			// Sort alphabetically by Title
+            // Sort alphabetically by Title
             sort(results.begin(), results.end(), [](Resource* a, Resource* b) {
                 return a->getTitle() < b->getTitle();
                 });
@@ -314,17 +319,33 @@ int main() {
             if (results.empty()) {
                 cout << "No results found" << endl;
             }
-			// ELSE: Display search results
+            // ELSE: Display search results
             else {
-				for (auto r : results) {
-					cout << r->asString() << endl;
-				}
+                for (auto r : results) {
+                    cout << r->asString() << endl;
+                }
             }
         }
 
-		// ELSE: no command is recognized
+        // ELSE IF: Displays content of history.txt file
+        else if (command == "history") {
+            ifstream historyFile("History.txt");
+            string line;
+            cout << "Borrowing/Returning History:" << endl;
+            if (historyFile.is_open()) {
+                while (getline(historyFile, line)) {
+                    cout << line << endl;
+                }
+                historyFile.close();
+            }
+            else {
+                cout << "No history yet." << endl;
+            }
+        }
+
+        // ELSE: no command is recognized
         else {
-            cout << "unknown command." << endl;
+            cout << "Unknown command." << endl;
         }
     }
     return 0;
