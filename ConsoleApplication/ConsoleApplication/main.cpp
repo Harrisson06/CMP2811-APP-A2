@@ -13,6 +13,32 @@
 
 using namespace std;
 
+// Helper function to find a user by ID
+Person* findUser(vector<Person*> users, int userID) {
+	auto it = find_if(users.begin(), users.end(), [&](Person* p) {
+		return p->getID() == userID;
+		});
+    return it != users.end() ? *it : nullptr;
+}
+
+// Hellper function to find a resource by ID
+Resource* findResource(vector<Resource*>& resources, string resourceID) {
+    auto it = find_if(resources.begin(), resources.end(), [&](Resource* r) {
+        return r->getID() == resourceID;
+        });
+	return it != resources.end() ? *it : nullptr;
+}
+
+// Helper function to save a report to a file 
+void saveReport(vector<string> lines, string filename) {
+    ofstream report(filename);
+    for (auto& line : lines) {
+        report << line << endl;
+    }
+    report.close();
+    cout << "Report saved to " << filename << endl;
+}
+
 int main() {
     // Loads data from files
     ResourceList resourceList("A2ResourceList.txt");
@@ -145,15 +171,12 @@ int main() {
                 getline(cin, save);
 
                 if (save == "y" || save == "Y") {
-                    // Create/overwrite Report.txt file and write loaned resources list
-                    ofstream report("Report.txt");
-                    report << "Resources currently loaned out:" << endl;
-
+                    vector<string> lines;
+					lines.push_back("Resources currently loaned out:");
                     for (auto r : loaned) {
-                        report << r->asString() << endl;
+                        lines.push_back(r->asString());
                     }
-                    report.close();
-                    cout << "Report saved to Report.txt" << endl;
+					saveReport(lines, "Report.txt");
                 }
             }
 
@@ -171,15 +194,12 @@ int main() {
 
                 // IF: User enteres "y" or "Y", save the report to "Report.txt"
                 if (save == "y" || save == "Y") {
-                    // Create/overwrite Report.txt file and writes user list
-                    ofstream report("Report.txt");
-                    report << "Users who have borrowed resources:" << endl;
-
+					vector<string> lines;
+                    lines.push_back("Users who have borrowed resources: ");
                     for (auto& loan : loans) {
-                        report << loan->getPerson()->asString() << endl;
+						lines.push_back(loan->getPerson()->asString());
                     }
-                    report.close();
-                    cout << "Report saved to Report.txt" << endl;
+					saveReport(lines, "Report.txt");
                 }
             }
         }
@@ -190,25 +210,12 @@ int main() {
             string resourceID;
             iss >> userID >> resourceID;
 
-            // Finding user by ID
-            Person* user = nullptr;
             auto uList = userList.getList();
-            auto userIt = find_if(uList.begin(), uList.end(), [&](Person* p) {
-                return p->getID() == userID;
-                });
-            if (userIt != uList.end()) {
-                user = *userIt;
-            }
+			auto rList = resourceList.getList();
 
-            // Finding resource by ID
-            Resource* resource = nullptr;
-            auto rList = resourceList.getList();
-            auto resourceIt = find_if(rList.begin(), rList.end(), [&](Resource* r) {
-                return r->getID() == resourceID;
-                });
-            if (resourceIt != rList.end()) {
-                resource = *resourceIt;
-            }
+            // Finding user | resource by ID
+            Resource* resource = findResource(rList, resourceID);
+            Person* user = findUser(uList, userID);
 
             // VALIDATION: Check if user exits in system
             if (user == nullptr) {

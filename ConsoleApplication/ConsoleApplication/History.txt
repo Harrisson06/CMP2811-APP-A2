@@ -19,3 +19,7 @@ Borrowed: User 5 borrowed Resource B002
 Borrowed: User 5 borrowed Resource B003
 Borrowed: User 1 borrowed Resource B001
 Returned: User 1 returned Resource B001
+Borrowed: User 1 borrowed Resource B001
+Returned: User 1 returned Resource B001
+Borrowed: User 1 borrowed Resource B001
+Borrowed: User 5 borrowed Resource B002
