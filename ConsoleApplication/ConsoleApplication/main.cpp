@@ -60,8 +60,20 @@ int main() {
                 if (!r->getIsBorrowed()) available.push_back(r);
             }
 
-            // IF: User selected ascending sort order (A-Z)
-            if (sortOption == "ascending") {
+            // IF: User selected sort by author
+            if (sortOption == "author") {
+                cout << "ascending or descending?" << endl;
+                string order;
+                getline(cin, order);
+                sort(available.begin(), available.end(), [&](Resource* a, Resource* b) {
+                    Book* ba = dynamic_cast<Book*>(a);
+                    Book* bb = dynamic_cast<Book*>(b);
+                    if (ba && bb) return order == "Ascending" ? ba->getAuthor() < bb->getAuthor() : ba->getAuthor() > bb->getAuthor();
+                    return a->getTitle() < b->getTitle();
+                    });
+            }
+            // ELSE IF: User selected ascending sort order (A-Z)
+            else if (sortOption == "ascending") {
                 sort(available.begin(), available.end(), [](Resource* a, Resource* b) {
                     return a->getTitle() < b->getTitle();
                 });
@@ -94,8 +106,21 @@ int main() {
                     loaned.push_back(loan->getResource());
                 }
 
-				// IF: User selected ascending sort order (A-Z)
-                if (sortOption == "ascending") {
+				// IF: User selected sort by author
+                if (sortOption == "author") {
+					cout << "ascending or descending?" << endl;
+					string order;
+					getline(cin, order);
+                    sort(loaned.begin(), loaned.end(), [&](Resource* a, Resource* b) {
+                        Book* ba = dynamic_cast<Book*>(a);
+                        Book* bb = dynamic_cast<Book*>(b);
+                        if (ba && bb) return order == "Ascending" ? ba->getAuthor() < bb->getAuthor() : ba->getAuthor() > bb->getAuthor();
+                        return a->getTitle() < b->getTitle();
+                        });
+                }
+
+				// ELSE IF: User selected ascending sort order (A-Z)
+                else if (sortOption == "ascending") {
 					sort(loaned.begin(), loaned.end(), [](Resource* a, Resource* b) {
 						return a->getTitle() < b->getTitle();
 						});
@@ -108,6 +133,7 @@ int main() {
 						});
 				}
 
+                // Display: Resource loaned out
                 cout << "Resources currently loaned out:" << endl;
                 for (auto r : loaned) {
                     cout << r->asString() << endl;
