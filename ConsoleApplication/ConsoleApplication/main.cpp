@@ -166,20 +166,20 @@ int main() {
 
             // Finding user by ID
             Person* user = nullptr;
-            for (auto u : userList.getList()) {
-                if (u->getID() == userID) {
-                    user = u;
-                    break;
-                }
+			auto userIt = find_if(userList.getList().begin(), userList.getList().end(), [&](Person* p) {
+				return p->getID() == userID;
+				});
+			if (userIt != userList.getList().end()) {
+				user = *userIt;
             }
 
             // Finding resource by ID
             Resource* resource = nullptr;
-            for (auto r : resourceList.getList()) {
-                if (r->getID() == resourceID) {
-                    resource = r;
-                    break;
-                }
+			auto resourceIt = find_if(resourceList.getList().begin(), resourceList.getList().end(), [&](Resource* r) {
+				return r->getID() == resourceID;
+				});
+			if (resourceIt != resourceList.getList().end()) {
+				resource = *resourceIt;
             }
 
             // VALIDATION: Check if user exits in system
@@ -236,47 +236,22 @@ int main() {
             string resourceID;
             iss >> userID >> resourceID;
 
-            // Search through active loans to find matching user | resource
-            for (auto& loan : loans) {
-                // IF: Found Matching user | resource
-                if (loan->getPerson()->getID() == userID &&
-                    loan->getResource()->getID() == resourceID) {
+			auto it = remove_if(loans.begin(), loans.end(), [&](const unique_ptr<Loan>& l) {
+				return l->getPerson()->getID() == userID && l->getResource()->getID() == resourceID;
+				});
 
-					// Marks resource as returned
-                    loan->getResource()->setIsBorrowed(false);
-					// Remove the loan from active loans list
-                    loans.erase(remove(loans.begin(), loans.end(), loan), loans.end());
-                    cout << "Resource has been returned" << endl;
-
-
-                    // Append return transaction to history.txt
-					ofstream history("History.txt", ios::app);
-					history << "Returned: User " << userID << " returned Resource " << resourceID << endl;
-					history.close();
-                    break;
-                }
+            if (it != loans.end()) {
+                (*it)->getResource()->setIsBorrowed(false);
+                loans.erase(it, loans.end());
+                cout << "Resource Has been returned" << endl;
+                ofstream history("History.txt", ios::app);
+                history << "Returned: User " << userID << " returned Resource " << resourceID << endl;
+                history.close();
             }
-        }
-
-        // ELSE IF: User wants to view transaction history
-        else if (command == "history") {
-			// Opens history.txt
-			ifstream history("History.txt");
-
-            // IF: history.txt opened successfully
-			if (history.is_open()) {
-				string line;
-                cout << "Borrowing and Return history: " << endl;
-				// Reads each line from history.txt and displays it
-				while (getline(history, line)) {
-					cout << line << endl;
-				}
-				history.close();
-			}
-			// ELSE: History file doesnt exist or cannot be opened
-			else {
-				cout << "No history available." << endl;
-			}
+            // ELSE: No matching loan record found for this combination
+            else {
+                cout << "Loan not found" << endl;
+            }
         }
 
         // ELSE IF: User wants to search for a resource by keyword
