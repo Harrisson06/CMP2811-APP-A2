@@ -4,7 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-
+#include <memory>
 
 #include "ResourceList.h"
 #include "UserList.h"
@@ -27,8 +27,8 @@ int main() {
     cout << "Search [keyword]: Search for resources containing the keyword in the author/title/acronym" << endl;
     cout << "History: ordered list of borrowing/returning" << endl;
 
-    // Vector to store all active loans
-    vector<Loan*> loans;
+    // Smart pointer Vector to store all active loans
+    vector<unique_ptr<Loan>> loans;
     string input;
 
     // Main loop | Runs until exit command is given
@@ -90,7 +90,7 @@ int main() {
 
                 // Collects all resources that are loaned out
 				vector<Resource*> loaned;
-                for (auto loan : loans) {
+                for (auto& loan : loans) {
                     loaned.push_back(loan->getResource());
                 }
 
@@ -112,12 +112,29 @@ int main() {
                 for (auto r : loaned) {
                     cout << r->asString() << endl;
                 }
+
+				// Prompt user to save the report to a .txt file
+				cout << "Do you want to save this report to a file? (y/n) ";
+				string save;    
+				getline(cin, save);
+
+                if (save == "y" || save == "Y") {
+                    // Create/overwrite LoaneReport.txt file and write loaned resources list
+                    ofstream report("Report.txt");
+                    report << "Resources currently loaned out:" << endl;
+
+                    for (auto r : loaned) {
+                        report << r->asString() << endl;
+                    }
+                    report.close();
+                    cout << "Report saved to Report.txt" << endl;
+                }
             }
 
             // ELSE IF: Report type 2 | Shows all users who have borrowed resources
             else if (type == 2) {
                 cout << "Users who have borrowed resources:" << endl;
-                for (auto loan : loans) {
+                for (auto& loan : loans) {
                     cout << loan->getPerson()->asString() << endl;
                 }
 
@@ -132,7 +149,7 @@ int main() {
                     ofstream report("Report.txt");
 					report << "Users who have borrowed resources:" << endl;
 
-                    for (auto loan : loans) {
+                    for (auto& loan : loans) {
 						report << loan->getPerson()->asString() << endl;
                     }
                     report.close();
@@ -202,7 +219,7 @@ int main() {
                     // Marks resource as borrowed
                     resource->setIsBorrowed(true);
                     // Creates new loan record
-                    loans.push_back(new Loan(user, resource));
+                    loans.push_back(make_unique<Loan>(user, resource));
                     cout << "Resource has been borrowed" << endl;
 
                     // Appends borrow transaction to history.txt
@@ -309,10 +326,5 @@ int main() {
             cout << "unknown command." << endl;
         }
     }
-	// Manual cleanup of memory allocated for loans
-	for (auto loan : loans) {
-		delete loan;
-	}
-    loans.clear();
     return 0;
 }
