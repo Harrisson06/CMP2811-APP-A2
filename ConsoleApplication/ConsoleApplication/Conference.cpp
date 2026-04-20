@@ -1,10 +1,16 @@
 #include "Conference.h"
 
-Conference::Conference(string id, string title, string acronym) 
+Conference::Conference(string id, string title) 
     : Resource(id, title, false) {
-    _acronym = acronym;
+    // No acronyms added ny addAcronym function
 }
 
 string Conference::asString() {
-    return "ID: " + _ID + " | Title: " + _title + " | Acronym: " + _acronym;
-}
+    // Build acronym list as comma-seperated string
+    string acronymStr = "";
+	for (int i = 0; i < _acronyms.size(); i++) {
+        if (i > 0) acronymStr += ", ";
+        acronymStr += _acronyms[i];
+		}
+    return "ID: " + _ID + " | Title: " + _title + " | Acronyms: " + acronymStr;
+	}
