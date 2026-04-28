@@ -1,3 +1,6 @@
+// Student Name: Harrison Macdonald 
+// Student Number: 28958802
+
 #include <iostream>
 #include <fstream>
 #include <string>
