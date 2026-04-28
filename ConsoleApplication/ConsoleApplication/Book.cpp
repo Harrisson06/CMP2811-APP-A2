@@ -1,10 +1,10 @@
 #include "Book.h"
 
-Book::Book(string id, string title, string author)
+Book::Book(std::string id, std::string title, std::string author)
     : Resource(id, title, true) {
         _author = author;
     }
 
-string Book::asString() {
+std::string Book::asString() {
     return "ID: " + _ID + " | Title: " + _title + " | Author: " + _author;
 }

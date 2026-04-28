@@ -1,9 +1,9 @@
 #include "Staff.h"
 
-Staff::Staff(int id, string name) 
+Staff::Staff(int id, std::string name) 
     : Person(id, name, 2) {
 }
 
-string Staff::asString() {
-    return "ID: " + to_string(_ID) + " | Name: " + _name + " | Type: Staff | Borrow Limit: 2";
+std::string Staff::asString() {
+    return "ID: " + std::to_string(_ID) + " | Name: " + _name + " | Type: Staff | Borrow Limit: 2";
 }

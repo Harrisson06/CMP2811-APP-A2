@@ -3,6 +3,6 @@
 
 class LibStaff :public Person {
 public:
-    LibStaff(int id, string name);
-    string asString() override;
+    LibStaff(int id, std::string name);
+    std::string asString() override;
 };

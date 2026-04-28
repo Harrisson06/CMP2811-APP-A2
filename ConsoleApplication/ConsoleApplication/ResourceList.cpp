@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-using namespace std;
+#include <string>
 
 ResourceList::ResourceList() {}
 
 // Constructor that loads resources from file
-ResourceList::ResourceList(string filename) {
-    ifstream file(filename);
-    string line;
+ResourceList::ResourceList(std::string filename) {
+    std::ifstream file(filename);
+    std::string line;
 
     // Counters for each resource type to generate unique IDs
     int bookCount = 0;
@@ -33,23 +33,23 @@ ResourceList::ResourceList(string filename) {
         // Section 2 = Books
         if (section == 2) {
             // Books format: Author | Title | Year (3 consecutive lines)
-            string author = line;
-            string title, year;
-            getline(file, title);
+            std::string author = line;
+            std::string title, year;
+            std::getline(file, title);
             getline(file, year);
 
             bookCount++;
-            string id = "B00" + to_string(bookCount);
+            std::string id = "B00" + std::to_string(bookCount);
             _r_list.push_back(new Book(id, title, author));
         }
 
         // Section 3 = Journals
         else if (section == 3) {
-            if (line.find(':') == string::npos) {
+            if (line.find(':') == std::string::npos) {
                 // No colon = journal title
                 journalCount++;
-                string id = "J00" + to_string(journalCount);
-                _r_list.push_back(new Journal(id, line));
+                std::string id = "J00" + std::to_string(journalCount);
+                _r_list.push_back(new Journal(id,line));
             }
             else {
                 // Colon = volume:issue line, attach to last journal
@@ -64,10 +64,10 @@ ResourceList::ResourceList(string filename) {
 
         // Section 4 = Conferences
         else if (section == 4) {
-            if (line.find(' ') != string::npos) {
+            if (line.find(' ') != std::string::npos) {
                 // Contains spaces = conference title
                 confCount++;
-                string id = "C00" + to_string(confCount);
+                std::string id = "C00" + std::to_string(confCount);
                 _r_list.push_back(new Conference(id, line));
             }
             else {
@@ -90,7 +90,7 @@ void ResourceList::printResourceList() {
     for (auto r : _r_list) {
         // IF: Resource is not currently borrowed
         if (!r->getIsBorrowed()) {
-            cout << r->asString() << endl;
+            std::cout << r->asString() << std::endl;
         }
     }
 }

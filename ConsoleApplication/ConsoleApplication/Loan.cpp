@@ -5,6 +5,6 @@ Loan::Loan(Person* per, Resource* res) {
     _res = res;
 }
 
-string Loan::asString() {
+std::string Loan::asString() {
     return "user: " + _per->getName() + " | Resource: " + _res->getTitle();
 }

@@ -1,6 +1,6 @@
 #include "Resource.h"
 
-Resource::Resource(string id, string title, bool canLend) {
+Resource::Resource(std::string id, std::string title, bool canLend) {
     _ID = id;
     _title = title;
     _canlend = canLend;

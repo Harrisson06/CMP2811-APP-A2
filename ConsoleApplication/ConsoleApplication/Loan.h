@@ -1,6 +1,7 @@
 #pragma once
 #include "person.h"
 #include "Resource.h"
+#include <string>
 
 // Represents a loan transaction linking a user to a borrowed resource
 class Loan {
@@ -17,5 +18,5 @@ public:
 	Resource* getResource() { return _res; } 	// Returns pointer to resource that was loaned
 
     // Returns string representation of the loan transaction
-    string asString();
+    std::string asString();
 };

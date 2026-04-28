@@ -3,6 +3,6 @@
 
 class Staff : public Person {
 public:
-    Staff(int id, string name);
-    string asString() override;
+    Staff(int id, std::string name);
+    std::string asString() override;
 };

@@ -2,14 +2,13 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-using namespace std;
 
 UserList::UserList() {}
 
 // Constructor loads users from file
-UserList::UserList(string filename) {
-    ifstream file(filename);
-    string line;
+UserList::UserList(std::string filename) {
+    std::ifstream file(filename);
+    std::string line;
     int userCount = 0;
 
     // Read file line by line
@@ -24,7 +23,7 @@ UserList::UserList(string filename) {
 		// First character indicates user type (1=Student, 2=Staff, 3=LibStaff)
         char type = line[0];
         // Extract user name
-        string name = line.substr(1);
+        std::string name = line.substr(1);
 
         // IF: User type is "1", create new Student
         if (type == '1') {
@@ -45,6 +44,6 @@ UserList::UserList(string filename) {
 // Helper function to print all users
 void UserList::printUserList() {
     for (auto u : _u_list) {
-        cout << u->asString() << endl;
+        std::cout << u->asString() << std::endl;
     }
 }

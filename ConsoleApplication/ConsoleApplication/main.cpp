@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <memory>
+#include <ctime>
 
 #include "ResourceList.h"
 #include "UserList.h"
@@ -62,6 +63,20 @@ void sortByAuthor(vector<Resource*>& list, bool ascending) {
         return ascending ? a->getTitle() < b->getTitle()
             : a->getTitle() > b->getTitle();
         });
+}
+
+// Helper: gets current timestamp as string
+string getTimestamp() {
+	time_t now = time(0);
+    tm ltm;
+    localtime_s(&ltm, &now);
+	string timestamp = to_string(1900 + ltm.tm_year) + "-" +
+		               to_string(1 + ltm.tm_mon) + "-" +
+		               to_string(ltm.tm_mday) + " " +
+		               to_string(ltm.tm_hour) + ":" +
+		               to_string(ltm.tm_min) + ":" +
+		               to_string(ltm.tm_sec);
+	return timestamp;
 }
 
 int main() {
@@ -248,7 +263,7 @@ int main() {
 
                     // Append to history file
                     ofstream history("History.txt", ios::app);
-                    history << "Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
+                    history << "[" << getTimestamp() << "] Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
                     history.close();
                 }
             }
@@ -283,7 +298,7 @@ int main() {
 
                 // Append to history file
                 ofstream history("History.txt", ios::app);
-                history << "Returned: User " << userID << " returned Resource " << resourceID << endl;
+                history << "[" << getTimestamp() << "] Returned: User " << userID << " returned Resource " << resourceID << endl;
                 history.close();
             }
             else {

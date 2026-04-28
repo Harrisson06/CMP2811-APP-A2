@@ -5,14 +5,13 @@
 #include "LibStaff.h"
 #include <vector>
 #include <string>
-using namespace std;
 
 class UserList {
 private:
-    vector<Person*> _u_list;
+    std::vector<Person*> _u_list;
 public:
     UserList();
-    UserList(string filename);
+    UserList(std::string filename);
     void printUserList();
-    vector<Person*> getList() {return _u_list; }
+    std::vector<Person*> getList() {return _u_list; }
 };
