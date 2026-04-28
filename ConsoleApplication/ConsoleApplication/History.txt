@@ -1,2 +1,5 @@
 [2026-4-28 15:11:53] Borrowed: User 1 borrowed Resource B001
 [2026-4-28 15:11:58] Returned: User 1 returned Resource B001
+[2026-4-28 15:16:2] Borrowed: User 1 borrowed Resource B001
+[2026-4-28 15:16:6] Returned: User 1 returned Resource B001
+[2026-4-28 15:32:16] Borrowed: User 1 borrowed Resource B001

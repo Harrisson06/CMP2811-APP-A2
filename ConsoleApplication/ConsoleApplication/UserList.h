@@ -13,5 +13,5 @@ public:
     UserList();
     UserList(std::string filename);
     void printUserList();
-    std::vector<Person*> getList() {return _u_list; }
+    std::vector<Person*> getList() const {return _u_list; }
 };

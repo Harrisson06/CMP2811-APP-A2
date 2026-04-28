@@ -13,5 +13,5 @@ public:
     ResourceList();
     ResourceList(std::string filename);
     void printResourceList();
-    std::vector<Resource*> getList() {return _r_list; }
+    std::vector<Resource*> getList() const {return _r_list; }
 };

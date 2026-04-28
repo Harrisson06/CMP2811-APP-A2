@@ -19,10 +19,10 @@ public:
     virtual std::string asString() = 0;
 
     // Getters
-	std::string getID() { return _ID; }                   // Returns resource ID
-	std::string getTitle() { return _title; }			 // Returns resource title	
-	bool getCanLend() { return _canlend; }			 // Returns if resource can be borrowed
-	bool getIsBorrowed() { return _isBorrowed; }	 // Returns borrow status
+	std::string getID() const { return _ID; }                   // Returns resource ID
+	std::string getTitle() const { return _title; }			 // Returns resource title	
+	bool getCanLend() const { return _canlend; }			 // Returns if resource can be borrowed
+	bool getIsBorrowed() const { return _isBorrowed; }	 // Returns borrow status
 
     // Setters | Updates wether resource is currently borrowed
     void setIsBorrowed(bool b) { _isBorrowed =b; }

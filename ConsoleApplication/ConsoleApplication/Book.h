@@ -7,6 +7,6 @@ private:
     std::string _author;
 public:
     Book(std::string id, std::string title, std::string author);
-    std::string getAuthor() {return _author; }
+    std::string getAuthor() const {return _author; }
     std::string asString() override;
 };

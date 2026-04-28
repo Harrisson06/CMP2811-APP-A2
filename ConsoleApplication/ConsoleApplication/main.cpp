@@ -94,6 +94,7 @@ int main() {
     cout << "  report 2                               : All users who have borrowed a resource" << endl;
     cout << "  search [keyword]                       : Search by title / author / acronym" << endl;
     cout << "  history                                : Ordered list of borrowing/returning activity" << endl;
+	cout << "  overdue                                : List all overdue loans" << endl;
     cout << "  exit" << endl;
 
     // Smart pointer vector to store all active loans
@@ -180,8 +181,8 @@ int main() {
                 }
 
                 cout << "Resources currently loaned out:" << endl;
-                for (auto r : loaned) {
-                    cout << r->asString() << endl;
+                for (const auto& loan : loans) {
+                    cout << loan->asString() << endl;
                 }
 
                 cout << "Save this report to a file? (y/n) ";
@@ -207,7 +208,9 @@ int main() {
                 if (save == "y" || save == "Y") {
                     vector<string> lines;
                     lines.push_back("Users who have borrowed resources:");
-                    for (auto& loan : loans) lines.push_back(loan->getPerson()->asString());
+                    for (const auto& loan : loans) {
+                        lines.push_back(loan->asString());
+					}
                     saveReport(lines, "UsersReport.txt");
                 }
             }
@@ -357,6 +360,21 @@ int main() {
             }
             else {
                 cout << "No history recorded yet." << endl;
+            }
+        }
+
+        // ELSE IF: Display all overdue loans
+        else if (command == "overdue") {
+            bool found = false;
+            cout << "Overdue Loans:" << endl;
+            for (const auto& loan : loans) {
+                if (loan->isOverdue()) {
+					cout << loan->asString() << endl;
+                    found = true;
+                }
+            }
+            if (!found) {
+                cout << "No overdue loans at this time." << endl;
             }
         }
 

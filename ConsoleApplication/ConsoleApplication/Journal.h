@@ -10,6 +10,6 @@ private:
 public:
     Journal(std::string id, std::string title);
 	void addVolumeIssue(std::string vi) { _volumeIssues.push_back(vi); }
-    std::vector<std::string> getVolumeIssues() { return _volumeIssues; }
+    std::vector<std::string> getVolumeIssues() const { return _volumeIssues; }
     std::string asString() override;
 };

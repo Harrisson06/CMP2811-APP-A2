@@ -16,7 +16,7 @@ public:
     virtual std::string asString() = 0;
 
     // Getters
-	int getID() { return _ID; }                      // Returns user ID
-    std::string getName() {return _name; }                // Returns user name
-    int getBorrowlimit() {return _borrow_limit; }    // Returns user borrow limit
+	int getID() const { return _ID; }                      // Returns user ID
+    std::string getName() const {return _name; }                // Returns user name
+    int getBorrowlimit() const {return _borrow_limit; }    // Returns user borrow limit
 };
