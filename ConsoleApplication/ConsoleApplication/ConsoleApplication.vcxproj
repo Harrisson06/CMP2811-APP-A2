@@ -132,6 +132,7 @@
     <ClCompile Include="Journal.cpp" />
     <ClCompile Include="LibStaff.cpp" />
     <ClCompile Include="Loan.cpp" />
+    <ClCompile Include="LoanManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Journal.h" />
     <ClInclude Include="LibStaff.h" />
     <ClInclude Include="Loan.h" />
+    <ClInclude Include="LoanManager.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceList.h" />

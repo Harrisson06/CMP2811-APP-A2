@@ -47,3 +47,10 @@ void UserList::printUserList() {
         std::cout << u->asString() << std::endl;
     }
 }
+
+Person* UserList::findUser(int userID) const {
+	auto it = find_if(_u_list.begin(), _u_list.end(), [&](Person* p) {
+		return p->getID() == userID;
+		});
+	return it != _u_list.end() ? *it : nullptr;
+}

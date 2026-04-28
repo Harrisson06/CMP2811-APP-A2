@@ -94,3 +94,10 @@ void ResourceList::printResourceList() {
         }
     }
 }
+
+Resource* ResourceList::findResource(std::string resourceID) const {
+	auto it = std::find_if(_r_list.begin(), _r_list.end(), [&](Resource* r) {
+		return r->getID() == resourceID;
+		});
+	return it != _r_list.end() ? *it : nullptr;
+}

@@ -11,48 +11,32 @@
 #include "UserList.h"
 #include "Loan.h"
 #include "Person.h"
-
-using namespace std;
-
-// Helper function to find a user by ID
-Person* findUser(vector<Person*> users, int userID) {
-    auto it = find_if(users.begin(), users.end(), [&](Person* p) {
-        return p->getID() == userID;
-        });
-    return it != users.end() ? *it : nullptr;
-}
-
-// Helper function to find a resource by ID
-Resource* findResource(vector<Resource*>& resources, string resourceID) {
-    auto it = find_if(resources.begin(), resources.end(), [&](Resource* r) {
-        return r->getID() == resourceID;
-        });
-    return it != resources.end() ? *it : nullptr;
-}
+#include "LoanManager.h"
 
 // Helper function to save a report to a file
-void saveReport(vector<string> lines, string filename) {
-    ofstream report(filename);
+void saveReport(std::vector<std::string> lines, std::string filename) {
+    std::ofstream report(filename);
     for (auto& line : lines) {
-        report << line << endl;
+        report << line << std::endl;
     }
     report.close();
-    cout << "Report saved to " << filename << endl;
+    std::cout << "Report saved to " << filename << std::endl;
 }
 
 // Helper: prompts user for ascending/descending and returns true if ascending
 bool askSortOrder() {
-    cout << "ascending or descending? ";
-    string order;
-    getline(cin, order);
+    std::cout << "ascending or descending? ";
+    std::string order;
+    getline(std::cin, order);
     // Convert to lowercase for case-insensitive comparison
     transform(order.begin(), order.end(), order.begin(), ::tolower);
     return order == "ascending";
 }
 
 // Helper: sorts a resource vector by author (Books) or title (others)
-void sortByAuthor(vector<Resource*>& list, bool ascending) {
+void sortByAuthor(std::vector<Resource*>& list, bool ascending) {
     sort(list.begin(), list.end(), [&](Resource* a, Resource* b) {
+        if (a == nullptr || b == nullptr) return false;
         Book* ba = dynamic_cast<Book*>(a);
         Book* bb = dynamic_cast<Book*>(b);
         if (ba && bb) {
@@ -66,16 +50,16 @@ void sortByAuthor(vector<Resource*>& list, bool ascending) {
 }
 
 // Helper: gets current timestamp as string
-string getTimestamp() {
+std::string getTimestamp() {
 	time_t now = time(0);
     tm ltm;
     localtime_s(&ltm, &now);
-	string timestamp = to_string(1900 + ltm.tm_year) + "-" +
-		               to_string(1 + ltm.tm_mon) + "-" +
-		               to_string(ltm.tm_mday) + " " +
-		               to_string(ltm.tm_hour) + ":" +
-		               to_string(ltm.tm_min) + ":" +
-		               to_string(ltm.tm_sec);
+	std::string timestamp = std::to_string(1900 + ltm.tm_year) + "-" +
+		               std::to_string(1 + ltm.tm_mon) + "-" +
+		               std::to_string(ltm.tm_mday) + " " +
+		               std::to_string(ltm.tm_hour) + ":" +
+		               std::to_string(ltm.tm_min) + ":" +
+		               std::to_string(ltm.tm_sec);
 	return timestamp;
 }
 
@@ -85,29 +69,29 @@ int main() {
     UserList userList("A2UserList.txt");
 
     // Display welcome message and command instructions
-    cout << "<|| Welcome to UniLib: The University Library Management System ||>" << endl;
-    cout << "Commands:" << endl;
-    cout << "  borrow [userID] [resourceID]" << endl;
-    cout << "  return [userID] [resourceID]" << endl;
-    cout << "  list [ascending|descending|author]  : All resources available for lending" << endl;
-    cout << "  report 1 [ascending|descending|author] : Resources currently loaned out" << endl;
-    cout << "  report 2                               : All users who have borrowed a resource" << endl;
-    cout << "  search [keyword]                       : Search by title / author / acronym" << endl;
-    cout << "  history                                : Ordered list of borrowing/returning activity" << endl;
-	cout << "  overdue                                : List all overdue loans" << endl;
-    cout << "  exit" << endl;
+    std::cout << "<|| Welcome to UniLib: The University Library Management System ||>" << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  borrow [userID] [resourceID]" << std::endl;
+    std::cout << "  return [userID] [resourceID]" << std::endl;
+    std::cout << "  list [ascending|descending|author]  : All resources available for lending" << std::endl;
+    std::cout << "  report 1 [ascending|descending|author] : Resources currently loaned out" << std::endl;
+    std::cout << "  report 2                               : All users who have borrowed a resource" << std::endl;
+    std::cout << "  search [keyword]                       : Search by title / author / acronym" << std::endl;
+    std::cout << "  history                                : Ordered list of borrowing/returning activity" << std::endl;
+    std::cout << "  overdue                                : List all overdue loans" << std::endl;
+    std::cout << "  exit" << std::endl;
 
     // Smart pointer vector to store all active loans
-    vector<unique_ptr<Loan>> loans;
-    string input;
+    LoanManager loanManager;
+    std::string input;
 
     // Main loop — runs until exit command
     while (true) {
-        cout << "\n>>> ";
-        getline(cin, input);
+        std::cout << "\n>>> ";
+        getline(std::cin, input);
 
-        istringstream iss(input);
-        string command;
+        std::istringstream iss(input);
+        std::string command;
         iss >> command;
 
         // Convert command to lowercase for case-insensitive matching
@@ -120,11 +104,11 @@ int main() {
 
         // LIST: all available (non-borrowed) resources, with optional sort
         else if (command == "list") {
-            string sortOption;
+            std::string sortOption;
             iss >> sortOption;
-            transform(sortOption.begin(), sortOption.end(), sortOption.begin(), ::tolower);
+            std::transform(sortOption.begin(), sortOption.end(), sortOption.begin(), ::tolower);
 
-            vector<Resource*> available;
+            std::vector<Resource*> available;
             for (auto r : resourceList.getList()) {
                 if (!r->getIsBorrowed()) available.push_back(r);
             }
@@ -144,9 +128,9 @@ int main() {
                     });
             }
 
-            cout << "\nAvailable Resources:" << endl;
+            std::cout << "\nAvailable Resources:" << std::endl;
             for (auto r : available) {
-                cout << r->asString() << endl;
+                std::cout << r->asString() << std::endl;
             }
         }
 
@@ -156,12 +140,12 @@ int main() {
             iss >> type;
 
             if (type == 1) {
-                string sortOption;
+                std::string sortOption;
                 iss >> sortOption;
-                transform(sortOption.begin(), sortOption.end(), sortOption.begin(), ::tolower);
+                std::transform(sortOption.begin(), sortOption.end(), sortOption.begin(), ::tolower);
 
-                vector<Resource*> loaned;
-                for (auto& loan : loans) {
+                std::vector<Resource*> loaned;
+                for (auto& loan : loanManager.getLoans()) {
                     loaned.push_back(loan->getResource());
                 }
 
@@ -180,16 +164,16 @@ int main() {
                         });
                 }
 
-                cout << "Resources currently loaned out:" << endl;
-                for (const auto& loan : loans) {
-                    cout << loan->asString() << endl;
+                std::cout << "Resources currently loaned out:" << std::endl;
+                for (const auto& loan : loanManager.getLoans()) {
+                    std::cout << loan->asString() << std::endl;
                 }
 
-                cout << "Save this report to a file? (y/n) ";
-                string save;
-                getline(cin, save);
+                std::cout << "Save this report to a file? (y/n) ";
+                std::string save;
+                getline(std::cin, save);
                 if (save == "y" || save == "Y") {
-                    vector<string> lines;
+                    std::vector<std::string> lines;
                     lines.push_back("Resources currently loaned out:");
                     for (auto r : loaned) lines.push_back(r->asString());
                     saveReport(lines, "LoanedReport.txt"); 
@@ -197,18 +181,18 @@ int main() {
             }
 
             else if (type == 2) {
-                cout << "Users who have borrowed resources:" << endl;
-                for (auto& loan : loans) {
-                    cout << loan->getPerson()->asString() << endl;
+                std::cout << "Users who have borrowed resources:" << std::endl;
+                for (auto& loan : loanManager.getLoans()) {
+                    std::cout << loan->getPerson()->asString() << std::endl;
                 }
 
-                cout << "Save this report to a file? (y/n) ";
-                string save;
-                getline(cin, save);
+                std::cout << "Save this report to a file? (y/n) ";
+                std::string save;
+                getline(std::cin, save);
                 if (save == "y" || save == "Y") {
-                    vector<string> lines;
+                    std::vector<std::string> lines;
                     lines.push_back("Users who have borrowed resources:");
-                    for (const auto& loan : loans) {
+                    for (const auto& loan : loanManager.getLoans()) {
                         lines.push_back(loan->asString());
 					}
                     saveReport(lines, "UsersReport.txt");
@@ -219,114 +203,83 @@ int main() {
         // BORROW: lend a resource to a user
         else if (command == "borrow") {
             int userID;
-            string resourceID;
+            std::string resourceID;
 
             // VALIDATION: check numeric userID was provided
             if (!(iss >> userID)) {
-                cout << "Invalid user ID. Usage: borrow [userID] [resourceID]" << endl;
+                std::cout << "Invalid user ID. Usage: borrow [userID] [resourceID]" << std::endl;
                 continue;
             }
             if (!(iss >> resourceID)) {
-                cout << "Invalid resource ID. Usage: borrow [userID] [resourceID]" << endl;
+                std::cout << "Invalid resource ID. Usage: borrow [userID] [resourceID]" << std::endl;
                 continue;
             }
 
-            auto uList = userList.getList();
-            auto rList = resourceList.getList();
-
-            Resource* resource = findResource(rList, resourceID);
-            Person* user = findUser(uList, userID);
+            Person* user = userList.findUser(userID);
+			Resource* resource = resourceList.findResource(resourceID);
 
             if (user == nullptr) {
-                cout << "User not found." << endl;
+                std::cout << "User not found." << std::endl;
             }
             else if (resource == nullptr) {
-                cout << "Resource not found." << endl;
+                std::cout << "Resource not found." << std::endl;
             }
             else {
-                // Count how many resources this user currently has borrowed
-                int userLoanCount = 0;
-                for (auto& loan : loans) {
-                    if (loan->getPerson()->getID() == user->getID()) userLoanCount++;
-                }
+				std::string result = loanManager.borrowResource(user, resource);
+                std::cout << result << std::endl;
 
-                if (user->getBorrowlimit() == 0) {
-                    cout << "User " << userID << " is not permitted to borrow resources." << endl;
-                }
-                else if (!resource->getCanLend() || resource->getIsBorrowed()) {
-                    cout << "Resource " << resourceID << " is not available to borrow." << endl;
-                }
-                else if (userLoanCount >= user->getBorrowlimit()) {
-                    cout << "User " << userID << " has reached their borrowing limit." << endl;
-                }
-                else {
-                    resource->setIsBorrowed(true);
-                    loans.push_back(make_unique<Loan>(user, resource));
-                    cout << "Resource " << resourceID << " successfully borrowed by user " << userID << "." << endl;
-
-                    // Append to history file
-                    ofstream history("History.txt", ios::app);
-                    history << "[" << getTimestamp() << "] Borrowed: User " << userID << " borrowed Resource " << resourceID << endl;
-                    history.close();
+                    // Log to history is success
+					if (result.find("successfully borrowed") != std::string::npos) {
+						std::ofstream history("History.txt", std::ios::app);
+						history << "[" << getTimestamp() << "] Borrowed: User " << userID << " borrowed Resource " << resourceID << std::endl;
+						history.close();
+					}
                 }
             }
-        }
 
         // RETURN: return a borrowed resource
         else if (command == "return") {
             int userID;
-            string resourceID;
+            std::string resourceID;
 
             // VALIDATION: check numeric userID was provided
             if (!(iss >> userID)) {
-                cout << "Invalid user ID. Usage: return [userID] [resourceID]" << endl;
+                std::cout << "Invalid user ID. Usage: return [userID] [resourceID]" << std::endl;
                 continue;
             }
             if (!(iss >> resourceID)) {
-                cout << "Invalid resource ID. Usage: return [userID] [resourceID]" << endl;
+                std::cout << "Invalid resource ID. Usage: return [userID] [resourceID]" << std::endl;
                 continue;
             }
 
-            auto it = remove_if(loans.begin(), loans.end(), [&](const unique_ptr<Loan>& l) {
-                return l->getPerson()->getID() == userID && l->getResource()->getID() == resourceID;
-                });
+			std::string result = loanManager.returnResource(userID, resourceID);
+            std::cout << result << std::endl;
 
-            if (it != loans.end()) {
-                // Mark resource as available before erasing the loan record
-                for (auto i = it; i != loans.end(); ++i) {
-                    (*i)->getResource()->setIsBorrowed(false);
-                }
-                loans.erase(it, loans.end());
-                cout << "Resource " << resourceID << " successfully returned by user " << userID << "." << endl;
-
-                // Append to history file
-                ofstream history("History.txt", ios::app);
-                history << "[" << getTimestamp() << "] Returned: User " << userID << " returned Resource " << resourceID << endl;
-                history.close();
-            }
-            else {
-                cout << "No matching loan found for user " << userID << " and resource " << resourceID << "." << endl;
+            if (result.find("successfully") != std::string::npos) {
+                std::ofstream history("History.txt", std::ios::app);
+                history << "[" << getTimestamp() << "] Returned: User " << userID << " returned Resource " << resourceID << std::endl;
+				history.close();
             }
         }
 
         // SEARCH: find resources by keyword in title, author, or acronym
         else if (command == "search") {
-            string keyword;
+            std::string keyword;
             iss >> keyword;
 
             if (keyword.empty()) {
-                cout << "Usage: search [keyword]" << endl;
+                std::cout << "Usage: search [keyword]" << std::endl;
                 continue;
             }
 
             // Lowercase keyword for case-insensitive matching
             transform(keyword.begin(), keyword.end(), keyword.begin(), ::tolower);
 
-            vector<Resource*> results;
+            std::vector<Resource*> results;
             for (auto r : resourceList.getList()) {
-                string str = r->asString();
+                std::string str = r->asString();
                 transform(str.begin(), str.end(), str.begin(), ::tolower);
-                if (str.find(keyword) != string::npos) {
+                if (str.find(keyword) != std::string::npos) {
                     results.push_back(r);
                 }
             }
@@ -336,51 +289,46 @@ int main() {
                 return a->getTitle() < b->getTitle();
                 });
 
-            cout << "Search results for \"" << keyword << "\":" << endl;
+            std::cout << "Search results for \"" << keyword << "\":" << std::endl;
             if (results.empty()) {
-                cout << "No results found." << endl;
+                std::cout << "No results found." << std::endl;
             }
             else {
                 for (auto r : results) {
-                    cout << r->asString() << endl;
+                    std::cout << r->asString() << std::endl;
                 }
             }
         }
 
         // HISTORY: display the borrowing/returning activity log
         else if (command == "history") {
-            ifstream historyFile("History.txt");
+            std::ifstream historyFile("History.txt");
             if (historyFile.is_open()) {
-                cout << "Borrowing/Returning History:" << endl;
-                string line;
+                std::cout << "Borrowing/Returning History:" << std::endl;
+                std::string line;
                 while (getline(historyFile, line)) {
-                    cout << line << endl;
+                    std::cout << line << std::endl;
                 }
                 historyFile.close();
             }
             else {
-                cout << "No history recorded yet." << endl;
+                std::cout << "No history recorded yet." << std::endl;
             }
         }
 
         // ELSE IF: Display all overdue loans
         else if (command == "overdue") {
-            bool found = false;
-            cout << "Overdue Loans:" << endl;
-            for (const auto& loan : loans) {
-                if (loan->isOverdue()) {
-					cout << loan->asString() << endl;
-                    found = true;
-                }
-            }
-            if (!found) {
-                cout << "No overdue loans at this time." << endl;
-            }
+			auto overdueLoans = loanManager.getOverdueLoans();
+            std::cout << "Overdue Loans:" << std::endl;
+			if (overdueLoans.empty()) {
+				std::cout << "No overdue loans at this time." << std::endl;
+				continue;
+			}
         }
 
         // UNKNOWN COMMAND
         else {
-            cout << "Unknown command. Type 'exit' to quit." << endl;
+            std::cout << "Unknown command. Type 'exit' to quit." << std::endl;
         }
     }
 

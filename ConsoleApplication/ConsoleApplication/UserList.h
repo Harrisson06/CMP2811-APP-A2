@@ -5,6 +5,7 @@
 #include "LibStaff.h"
 #include <vector>
 #include <string>
+#include <algorithm>
 
 class UserList {
 private:
@@ -14,4 +15,5 @@ public:
     UserList(std::string filename);
     void printUserList();
     std::vector<Person*> getList() const {return _u_list; }
+    Person* findUser(int userID) const;
 };

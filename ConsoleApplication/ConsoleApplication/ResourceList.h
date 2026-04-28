@@ -14,4 +14,5 @@ public:
     ResourceList(std::string filename);
     void printResourceList();
     std::vector<Resource*> getList() const {return _r_list; }
+    Resource* findResource(std::string resourceID) const;
 };

@@ -19,6 +19,6 @@ bool Loan::isOverdue() const {
 	return time(0) > _dueDate;
 }
 
-std::string Loan::asString() {
+std::string Loan::asString() const {
 	return _per->getName() + " | " + _res->getTitle() + " | Due: " + getDueDateString();
 }

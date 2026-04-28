@@ -23,5 +23,5 @@ public:
 	bool isOverdue() const;                           // Checks if the loan is overdue based on current date
 
     // Returns string representation of the loan transaction
-    std::string asString();
+    std::string asString() const;
 };
